@@ -1,6 +1,9 @@
 package lv.aliyev.websockettest;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -17,16 +20,20 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
+
     WebSocketClient mWebSocketClient;
     @BindView(R.id.text) EditText mMessage;
     @BindView(R.id.log) TextView mTextLog;
+    private ChatViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        connectWebSocket();
+        setupViewModel();
+
+        //connectWebSocket();
     }
 
     @Override protected void onDestroy() {
@@ -34,7 +41,21 @@ public class MainActivity extends AppCompatActivity {
         mWebSocketClient.close();
     }
 
-    //TODO single activity
+    private void setupViewModel() {
+        mViewModel = ViewModelProviders.of(this).get(ChatViewModel.class);
+        mViewModel.loadWebSocket();
+
+        final Observer<String> recieveObserver = message -> {
+            // Update the UI, in this case, a TextView.
+            mTextLog.append("\n");
+            mTextLog.append(message);
+        };
+        mViewModel.message().observe(this, recieveObserver);
+    }
+
+
+    //TODO SingleActivity
+    //ChatFragment
 
     private void connectWebSocket() {
         URI uri;
@@ -80,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.button) void sendMessage() {
-        mWebSocketClient.send(mMessage.getText().toString());
+        //mWebSocketClient.send(mMessage.getText().toString());
+        mViewModel.send(mMessage.getText().toString());
         mMessage.setText("");
     }
 
