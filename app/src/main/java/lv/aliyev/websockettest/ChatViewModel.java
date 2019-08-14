@@ -26,6 +26,10 @@ public class ChatViewModel extends ViewModel {
 
     }
 
+    //TODO
+    //LOGIN sessionid naiti
+
+
     @Override protected void onCleared() {
         super.onCleared();
         if (mWebSocketClient != null) mWebSocketClient.close();
@@ -57,7 +61,9 @@ public class ChatViewModel extends ViewModel {
             @Override
             public void onOpen (ServerHandshake serverHandshake){
                 Log.i("Websocket", "Opened");
-                mWebSocketClient.send("Hello from ");
+
+                String openMsg = "{\"command\":\"LOGIN\",\"data\":{\"restsessionid\":\"M431r5b5sjeklg9n90bqe1grt2v4j0\"}}";
+                mWebSocketClient.send(openMsg);
             }
 
             @Override

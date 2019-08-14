@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         mViewModel.loadWebSocket();
 
         final Observer<String> recieveObserver = message -> {
-            // Update the UI, in this case, a TextView.
+            // Update UI
             mTextLog.append("\n");
             mTextLog.append(message);
         };
