@@ -56,6 +56,8 @@ public class ChatViewModel extends ViewModel {
         if (mWebSocketClient != null) mWebSocketClient.send(message);
     }
 
+
+
     private WebSocketClient getChatWebSocketClient(URI uri) {
         return new  WebSocketClient(uri) {
             @Override
@@ -63,7 +65,10 @@ public class ChatViewModel extends ViewModel {
                 Log.i("Websocket", "Opened");
 
                 String openMsg = "{\"command\":\"LOGIN\",\"data\":{\"restsessionid\":\"M431r5b5sjeklg9n90bqe1grt2v4j0\"}}";
-                mWebSocketClient.send(openMsg);
+                this.send(openMsg);
+
+                openMsg = "{\"command\":\"GETCONTACTLIST\",\"data\":{\"restsessionid\":\"M431r5b5sjeklg9n90bqe1grt2v4j0\"}}";
+
             }
 
             @Override
